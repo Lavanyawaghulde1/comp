@@ -1,0 +1,33 @@
+Features of Raspberry Pi Board:
+1. Processor: ARM-based CPU (e.g., Quad-core Cortex-A72 for Pi 4).
+2. Memory: 512MB to 8GB RAM (depending on the model).
+3. Storage: MicroSD card slot for OS and data.
+4. Graphics: Broadcom VideoCore GPU, HDMI output (up to 4K).
+5. Connectivity: Ethernet, Wi-Fi, Bluetooth (varies by model).
+6. I/O: 40 GPIO pins, USB ports, HDMI, Camera (CSI), Display (DSI).
+7. Audio: 3.5mm jack or HDMI audio output.
+8. Power: 5V USB power supply.
+
+Available OS for Raspberry Pi:
+1. Raspberry Pi OS (formerly Raspbian)
+2. Ubuntu (Desktop/Server)
+3. LibreELEC (Media center)
+4. Osmc (Media center)
+5. Windows 10 IoT Core
+6. RetroPie (Gaming)
+7. Kali Linux (Penetration testing)
+8. DietPi (Lightweight OS)
+9. Android (Mobile OS)
+
+Program :
+From gniozero import LED
+From time import sleep
+Led-LED(4)
+While True:
+Led On()
+sleep(1)
+Led Off
+sleep(1)
+
+image.png
+
