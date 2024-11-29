@@ -1,0 +1,191 @@
+1.Toggle all LEDs:
+Code:
+#include<LPC214x.h>
+void delay_ms(unsigned int count)
+{
+unsigned int j=0, i=0;
+for(j=0;j<count;j++)
+{
+for(i=0;i<1500;i++);
+}
+}
+int main(){
+PINSEL0=0x00000000;
+IODIR0=0x000FF000;
+while(1){
+IOSET0=0x000FF000;
+delay_ms(1000);
+IOCLR0=0x000FF000;
+delay_ms(1000);
+}
+}
+
+2. Right to Left and Left to Right.
+Code:
+#include <LPC214x.h>
+void delay_ms(unsigned int time){
+unsigned int i = 0, j = 0;
+for(j=0;j<time;j++){
+for(i=0;i<1500;i++);
+}
+}
+int main(){
+unsigned int i =0;
+PINSEL0 &= 0x00FFFFFF;
+PINSEL1 &= 0xFFFFFF00;
+IODIR0 |= 0x000FF000;
+while(1){
+// right to left loop
+for(i=0;i<8; i++){
+delay_ms(1000);
+IOSET0 = 0x00001000<<i;
+delay_ms(1000);
+IOCLR0 = 0x000FF000;
+}
+//left to right loop
+for(i=0;i<7; i++){
+delay_ms(1000);
+IOSET0 = 0x00040000>>i;
+delay_ms(1000);
+IOCLR0 = 0x000FF000;
+}
+
+IOCLR0 = 0x000FF000;
+delay_ms(1000);
+}
+}
+
+3. Butterfly pattern: 
+
+1000 0001 
+
+0100 0010 
+
+0010 0100 
+
+0001 1000 
+
+#include <LPC214x.h> 
+
+void delay_ms(unsigned int time){ 
+
+unsigned int i = 0, j = 0; 
+
+for(j=0;j<time;j++){ 
+
+for(i=0;i<1500;i++); 
+
+} 
+
+} 
+
+int main(){ 
+
+unsigned int i =0; 
+
+PINSEL0 &= 0x00FFFFFF; 
+
+PINSEL1 &= 0xFFFFFF00; 
+
+IODIR0 |= 0x000FF000; 
+
+while(1){ 
+
+for(i=0;i<8; i++){ 
+
+if(i==4) i++; 
+
+delay_ms(1000); 
+
+IOSET0 = 0x00001000<<i; 
+
+IOSET0 = 0x00080000>>i; 
+
+delay_ms(1000); 
+
+IOCLR0 = 0x000FF000; 
+
+} 
+
+IOCLR0 = 0x000FF000; 
+
+delay_ms(4000); 
+
+} 
+
+}
+
+
+4. Adjacent LEDs toggle: 
+
+0000 0011 
+
+0000 0110 
+
+0000 1100 
+
+0001 1000 
+
+0011 0000 
+
+0110 0000 
+
+1100 0000 
+
+#include <LPC214x.h> 
+
+void delay_ms(unsigned int time){
+
+unsigned int i = 0, j = 0; 
+
+for(j=0;j<time;j++){ 
+
+for(i=0;i<1500;i++); 
+
+} 
+
+} 
+
+int main(){ 
+
+unsigned int i =0; 
+
+PINSEL0 &= 0x00FFFFFF; 
+
+PINSEL1 &= 0xFFFFFF00; 
+
+IODIR0 |= 0x000FF000; 
+
+while(1){ 
+
+for(i=0;i<7; i++){ 
+
+delay_ms(1000); 
+
+IOSET0 = 0x00003000<<i; 
+
+delay_ms(1000); 
+
+IOCLR0 = 0x000FF000; 
+
+} 
+
+for(i=0;i<5; i++){ 
+
+delay_ms(1000); 
+
+IOSET0 = 0x00060000>>i; 
+
+delay_ms(1000); 
+
+IOCLR0 = 0x000FF000; 
+
+} 
+
+IOCLR0 = 0x000FF000; 
+
+delay_ms(4000); 
+
+} 
+
+} 
