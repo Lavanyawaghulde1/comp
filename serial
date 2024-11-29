@@ -1,0 +1,59 @@
+Transmitting a character written in the code:
+Code:
+#include <lpc214x.h>
+int main(){
+PINSEL0 |= 0x05; // select TxD0 bit (01) & RxD0 bit (01)
+U0FCR = 0x07; // enable FIFO, clear both TX and RX
+U0LCR = 0x83; // select 8 bit character
+U0DLL = 0x62; // set baud rate 9600
+U0DLM = 0;
+U0LCR = 0x03; // disable DLAB
+U0THR= 'A';
+}
+
+Transmitting a string of character
+Code:
+#include <lpc214x.h>
+void uart_init(){
+PINSEL0 |= 0x05; // select TxD0 bit (01) & RxD0 bit (01)
+U0FCR = 0x07; // enable FIFO, clear both TX and RX
+U0LCR = 0x83; // select 8 bit character
+U0DLL = 0x62; // set baud rate 9600
+U0DLM = 0;
+U0LCR = 0x03; // disable DLAB
+}
+int main(){
+unsigned char data[]="SNEHAL & KHUSHI" ;
+uart_init();
+int i=0;
+while(data[i] != '\0'){
+U0THR= data[i];
+i++;
+
+}
+}
+
+Transmission and Reception
+
+Code:
+#include <lpc214x.h>
+void uart_init(){
+PINSEL0 |= 0x05; // select TxD0 bit (01) & RxD0 bit (01)
+U0FCR = 0x07; // enable FIFO, clear both TX and RX
+U0LCR = 0x83; // select 8 bit character
+U0DLL = 0x62; // set baud rate 9600
+U0DLM = 0;
+U0LCR = 0x03; // disable DLAB
+}
+int main(){
+unsigned char recev_data=0;
+
+uart_init();
+while(1){
+while(!(U0LSR & 0x01));
+recev_data=U0RBR;
+while(!(U0LSR & 0x20));
+U0THR= recev_data;
+}
+return 0;
+}
