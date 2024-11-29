@@ -1,0 +1,101 @@
+1) Square Wave
+#include <lpc214x.h>
+#define PinselMask 1<<19
+#define DACvalue 0x3FF
+void delay(unsigned int time){
+unsigned int i,j;
+for(i=0;i<time;i++){
+for(j=0;j<2000;j++);
+}}
+int main(){
+PINSEL1 |= PinselMask;
+unsigned int k ;
+while (1){
+DACR=DACvalue<<6;
+delay(20);
+DACR= 0x000;
+delay(20);
+}
+}
+
+2) Triangle Wave
+
+#include <lpc214x.h>
+#define PinselMask 1<<19
+void delay(unsigned int time)
+{
+
+unsigned int i,j;
+for(i=0;i<time;i++){
+for(j=0;j<2000;j++);
+}
+}
+int main(){
+PINSEL1 |= PinselMask;
+unsigned int k ;
+while (1){
+for(k=0;k<1024;k++)
+{
+DACR=k<<6;
+}
+for(k=1022;k>0;k--)
+{
+DACR=k<<6;
+}
+}
+}
+
+3) Sawtooth Wave
+#include <lpc214x.h>
+#define PinselMask 1<<19
+#define DACvalue 0x3FF
+void delay(unsigned int time)
+{
+unsigned int i,j;
+for(i=0;i<time;i++){
+for(j=0;j<2000;j++);
+}
+}
+int main(){
+PINSEL1 |= PinselMask;
+unsigned int k ;
+while (1){
+
+DACR=DACvalue<<6;
+
+for(k=1022;k>0;k--)
+{
+
+DACR=k<<6;
+}
+}
+}
+
+4) Step Wave
+
+#include <lpc214x.h>
+#define PinselMask 1<<19
+#define DACvalue 0x3FF
+void delay(unsigned int time)
+{
+unsigned int i,j;
+for(i=0;i<time;i++){
+for(j=0;j<2000;j++);
+}
+}
+int main(){
+PINSEL1 |= PinselMask;
+unsigned int k ;
+while (1){
+for(k=0;k<8;k++)
+{
+DACR=k*128<<6;
+delay(20);
+}
+for(k=6;k>0;k--)
+{
+DACR=k*128<<6;
+delay(20);
+}
+}
+}
