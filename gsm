@@ -1,0 +1,121 @@
+Code:
+Main file-
+#include <lpc21xx.h>
+#include "stdio.h"
+#include "string.h"
+#include "UART0.c"
+#include "UART1.c"
+
+void delay(unsigned int time){
+unsigned int i,j;
+for(i=0;i<time;i++){
+for(j=0;j<5000;j++);
+}
+}
+unsigned char message_1[] = "GSM program started UART initialised";
+unsigned char AT_cmd[] = "AT\n\r";
+//voice call commands
+unsigned char ATD_string[] = "ATD07248973744;\n\r"; // call a person
+unsigned char ATH_string[] = "ATH0\n\r"; // disconnect the call
+// SMS commands
+unsigned char cmgf_string[] = "AT+CMGF=1\n\r";
+unsigned char cmgs_string[] = "AT+CMGS=\"07248973744\"\n\r";
+unsigned char cntl_z = 0x1A;
+unsigned char text[]= "Have a good day :)";
+unsigned char text1[]= "\n\r";
+unsigned char text2[]= "Task Completed";
+unsigned char rcv_byte;
+unsigned char rcv_array[20];
+
+int main()
+{
+UART0_INIT(); //uart0 is user interface
+UART1_INIT(); // uart1 – &gt; GSM
+UART0_string_tx(message_1);
+UART1_string_tx(AT_cmd);
+UART0_string_tx(AT_cmd);
+delay(1000);
+UART1_string_tx(ATD_string);
+UART0_string_tx(ATD_string);
+delay(50000);
+UART1_string_tx(ATH_string);
+UART0_string_tx(ATH_string);
+delay(3000); // &gt; 5 sec
+UART1_string_tx(cmgf_string); // text mode
+UART0_string_tx(cmgf_string);
+delay(3000); // &gt; 1 sec
+UART1_string_tx(cmgs_string);
+UART0_string_tx(cmgs_string);
+delay(3000); // &gt; 2 sec (actually we should wait
+UART1_string_tx(text);
+UART0_string_tx(text);
+delay(3000); // &gt; 5 sec
+UART1_byte_tx(cntl_z); // message terminating
+UART0_byte_tx(cntl_z);
+UART1_string_tx(text1);
+UART0_string_tx(text1);
+UART1_string_tx(text2);
+delay(1000);
+while(1);
+return 0;
+}
+UART 0:
+#include<lpc21xx.h>
+
+void UART0_INIT(){
+PINSEL0 |= 0x00000005;
+U0LCR = 0x83;
+U0DLL = 0X61;
+U0DLM = 0X00;
+U0LCR = 0x03;
+U0FCR = 0x07;
+}
+void UART0_byte_tx(unsigned char tx_byte){
+while(!(U0LSR&0x20));
+U0THR=tx_byte;
+}
+unsigned char UART0_byte_rx(){
+unsigned char data=0;
+while(!(U0LSR & 0x01));
+data = U0RBR;
+return data;
+}
+void UART0_string_tx(unsigned char ch[]){
+unsigned int k=0;
+while (ch[k]!='\0') {
+UART0_byte_tx(ch[k]); // Transmit each character in the string
+
+k++;
+
+}
+}
+UART 1:
+#include<lpc21xx.h>
+void UART1_INIT(){
+PINSEL0 |= 0x00050000;
+U1LCR = 0x83;
+U1DLL = 0X61;
+U1DLM = 0X00;
+U1LCR = 0x03;
+U1FCR = 0x07;
+}
+void UART1_byte_tx(unsigned char tx_byte){
+while(!(U1LSR&0x20));
+U1THR=tx_byte;
+}
+
+unsigned char UART1_byte_rx(){
+unsigned char data=0;
+while(!(U1LSR & 0x01));
+data = U1RBR;
+return data;
+}
+void UART1_string_tx(unsigned char ch[]){
+unsigned int k=0;
+while (ch[k]!='\0') {
+UART1_byte_tx(ch[k]); // Transmit each character in the string
+
+k++;
+
+}
+}
